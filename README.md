@@ -301,6 +301,25 @@ Para facilitar las pruebas de integración, se ha incluido una colección de Pos
 *
 * ![Validacion API Postman 4](SetPruebas4.png)
 
+## 🚀 Validación de la API (Postman)
+
+Para garantizar una revisión ágil y precisa de los endpoints, se ha incluido una colección de **Postman** que contiene todos los flujos de negocio documentados y listos para ejecutar.
+
+### 📥 Cómo usar la colección:
+1.  **Localización:** El archivo se encuentra en la ruta: `/postman/BTG_Funds_Management.postman_collection.json`.
+2.  **Importación:** Abra Postman, haga clic en `Import` y seleccione el archivo mencionado.
+3.  **Variables:** La colección utiliza la variable `{{base_url}}` configurada por defecto en `http://localhost:8080/api/v1`.
+
+### 🧪 Escenarios de Prueba Incluidos:
+* **Consulta de Fondos:** Listado completo de los fondos disponibles (FIC y FPV).
+* **Suscripción Exitosa:** Vinculación de un cliente a un fondo (Valida descuento de saldo).
+* **Error - Saldo Insuficiente:** Validación de la regla de negocio cuando el monto de suscripción supera el balance del cliente.
+* **Error - Monto Mínimo:** Validación de suscripción por debajo del umbral permitido del fondo.
+* **Cancelación de Suscripción:** Proceso de retiro con reintegro automático de saldo al balance.
+* **Historial de Transacciones:** Consulta de movimientos filtrados por ID de cliente.
+
+> **💡 Tip:** Se recomienda ejecutar primero el script `arrancarSolucion.bat` para asegurar que el ambiente esté arriba y con los datos iniciales frescos antes de iniciar las pruebas en Postman.
+> 
 ---
 
 
