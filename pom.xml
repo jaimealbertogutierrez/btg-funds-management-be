@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ****************************************************************** -->
+<!-- ****************************************************************** -->
+<!-- ****************************************************************** -->
+<!--
+===============================================================================
+INFORMACIÓN DEL DESARROLLO
+===============================================================================
+
+    Autor del desarrollo: Jaime Alberto Gutierrez
+    Cargo: Analista Programador Java Backend
+    Profesión: Ingeniero de Sistemas y Computación
+    Documento de identidad: CC 9733675
+
+    Correo electrónico:
+    jaimealbertogutierrez@gmail.com
+
+    Teléfonos de contacto:
+    +57 311 8841634
+    034 649067928
+
+    Perfil profesional:
+    https://www.linkedin.com/in/jaime-alberto-guti%C3%A9rrez-mej%C3%ADa-a969bb9/
+
+Descripción del proyecto:
+Este archivo corresponde al descriptor de construcción Maven del microservicio
+btg-funds-service, desarrollado utilizando Spring Boot y orientado a la gestión
+de fondos dentro del ecosistema de servicios de la plataforma BTG.
+
+El proyecto utiliza MongoDB como motor de persistencia y sigue un enfoque
+de arquitectura de microservicios basado en servicios REST.
+
+Tecnologías principales empleadas:
+- Spring Boot
+- MongoDB
+- Maven
+- JaCoCo (cobertura de pruebas)
+- Java 17
+
+===============================================================================
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!--
+    ===============================================================================
+    VERSIÓN DEL MODELO DE PROYECTO MAVEN
+    ===============================================================================
+
+    Define la versión del modelo de proyecto utilizado por Maven.
+    La versión 4.0.0 corresponde al estándar actual de configuración
+    de proyectos Java gestionados mediante Maven.
+    ===============================================================================
+    -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+    ===============================================================================
+    CONFIGURACIÓN DEL PROYECTO PADRE (SPRING BOOT)
+    ===============================================================================
+
+    El proyecto hereda de spring-boot-starter-parent, lo que permite
+    utilizar la gestión centralizada de dependencias proporcionada por
+    Spring Boot.
+
+    Esto facilita:
+    - Control automático de versiones compatibles
+    - Configuración optimizada de compilación
+    - Integración con el ecosistema Spring
+
+    Versión utilizada: 3.2.4
+    ===============================================================================
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.4</version>
+        <relativePath/>
+    </parent>
+
+    <!--
+    ===============================================================================
+    IDENTIFICACIÓN DEL ARTEFACTO DEL MICROSERVICIO
+    ===============================================================================
+
+    groupId   : Identificador organizacional del proyecto
+    artifactId: Nombre del artefacto generado
+    version   : Versión actual del microservicio
+
+    El sufijo SNAPSHOT indica que se trata de una versión en desarrollo
+    y no una versión final liberada a producción.
+    ===============================================================================
+    -->
+    <groupId>com.btg</groupId>
+    <artifactId>funds</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!--
+    ===============================================================================
+    METADATOS DEL MICROSERVICIO
+    ===============================================================================
+
+    name:
+    Nombre del servicio dentro del ecosistema de microservicios.
+
+    description:
+    Descripción funcional del componente dentro de la arquitectura
+    del sistema.
+
+    Este microservicio se encarga de la gestión y administración de
+    fondos dentro de la plataforma BTG.
+    ===============================================================================
+    -->
+    <name>btg-funds-service</name>
+    <description>Microservicio de gestion de fondos BTG</description>
+
+    <!--
+    ===============================================================================
+    PROPIEDADES DEL PROYECTO
+    ===============================================================================
+
+    Las propiedades permiten centralizar variables reutilizables
+    en el proceso de construcción del proyecto.
+
+    java.version
+    Define la versión del JDK utilizada para la compilación del
+    microservicio.
+
+    project.build.sourceEncoding
+    project.reporting.outputEncoding
+    Garantizan que el proyecto utilice UTF-8 como codificación estándar
+    para evitar problemas con caracteres especiales.
+
+    jacoco.version
+    Versión del plugin utilizado para medir la cobertura de código
+    durante la ejecución de pruebas automatizadas.
+    ===============================================================================
+    -->
+    <properties>
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <jacoco.version>0.8.11</jacoco.version>
+    </properties>
+
+    <!--
+    ===============================================================================
+    DEPENDENCIAS DEL PROYECTO
+    ===============================================================================
+
+    Esta sección define las librerías necesarias para la ejecución
+    del microservicio.
+
+    Las dependencias pertenecen principalmente al ecosistema Spring Boot
+    y permiten construir una aplicación REST conectada a MongoDB.
+    ===============================================================================
+    -->
+    <dependencies>
+
+        <!--
+        Dependencia base de Spring Boot.
+
+        Proporciona los componentes fundamentales del framework,
+        incluyendo el contenedor de inversión de control y
+        la auto-configuración de la aplicación.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <!--
+        Dependencia para desarrollo de APIs REST.
+
+        Incluye:
+        - Spring MVC
+        - Servidor embebido Tomcat
+        - Serialización JSON
+        - Controladores REST
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--
+        Dependencia para persistencia con MongoDB.
+
+        Spring Data MongoDB permite:
+        - Mapear documentos MongoDB a objetos Java
+        - Implementar repositorios automáticamente
+        - Simplificar el acceso a datos NoSQL
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+
+        <!--
+        Dependencia utilizada para pruebas unitarias e integración.
+
+        Incluye herramientas como:
+        - JUnit
+        - Mockito
+        - Spring Test
+
+        Su alcance es únicamente para fase de pruebas.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--  Open API  -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.2.0</version> <!-- o la versión que uses -->
+        </dependency>
+
+    </dependencies>
+
+    <!--
+    ===============================================================================
+    CONFIGURACIÓN DEL PROCESO DE CONSTRUCCIÓN
+    ===============================================================================
+
+    La sección build define los plugins que participan en el ciclo
+    de vida de construcción del proyecto Maven.
+
+    Estos plugins permiten compilar, empaquetar, ejecutar pruebas
+    y generar reportes de calidad de código.
+    ===============================================================================
+    -->
+    <build>
+        <plugins>
+
+            <!--
+            Plugin oficial de Spring Boot.
+
+            Permite:
+            - Construir el artefacto ejecutable del microservicio
+            - Empaquetar la aplicación como JAR ejecutable
+            - Ejecutar la aplicación desde Maven
+            -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!--
+            Plugin JaCoCo para análisis de cobertura de pruebas.
+
+            Permite medir qué porcentaje del código está cubierto
+            por pruebas automatizadas.
+
+            Ejecuciones configuradas:
+
+            prepare-agent
+            Instrumenta el código antes de ejecutar las pruebas.
+
+            report
+            Genera un reporte de cobertura al finalizar la fase test.
+            -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+    <!-- ****************************************************************** -->
+    <!-- ****************************************************************** -->
+    <!-- ****************************************************************** -->
+</project>
+
+<!-- ****************************************************************** -->
+<!-- ****************************************************************** -->
+<!-- ****************************************************************** -->
+<!-- ****************************************************************** -->
+<!-- ****************************************************************** -->
+<!-- ****************************************************************** -->

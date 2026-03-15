@@ -1,0 +1,67 @@
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
+# INFORMACIÓN DEL DESARROLLO
+# Autor: Jaime Alberto Gutierrez | Analista Programador Java Backend
+# CC 9733675 | jaimealbertogutierrez@gmail.com
+###############################################################################
+
+services:
+
+  #############################################################################
+  # SERVICIO DE BASE DE DATOS: MONGODB
+  #############################################################################
+  mongodb:
+    image: public.ecr.aws/docker/library/mongo:6.0
+    container_name: btg-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER:-admin}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS:-secret}
+      - MONGO_INITDB_DATABASE=btg_funds_db
+    volumes:
+      - mongo_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    # Healthcheck: Valida que el motor de Mongo esté listo para recibir peticiones
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - btg-network
+
+  #############################################################################
+  # SERVICIO DE APLICACIÓN: MICROSERVICIO SPRING BOOT
+  #############################################################################
+  app:
+    build: .
+    platform: linux/amd64
+    container_name: btg-funds-app
+    ports:
+      - "8080:8080"
+    # Refinamiento de dependencia: No solo espera al contenedor, sino a que esté 'healthy'
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER:-admin}:${MONGO_PASS:-secret}@mongodb:27017/btg_funds_db?authSource=admin
+    networks:
+      - btg-network
+
+###############################################################################
+# REDES Y VOLÚMENES
+###############################################################################
+networks:
+  btg-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+
+###############################################################################
+###############################################################################
+###############################################################################

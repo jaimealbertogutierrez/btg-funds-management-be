@@ -1,0 +1,80 @@
+# ************************************************************
+# ************************************************************
+# ************************************************************
+# ************************************************************
+# Plantilla AWS CloudFormation para despliegue del Microservicio BTG Funds
+#
+# PROPÓSITO:
+# ----------
+# Esta plantilla representa la propuesta de empaquetado y despliegue en la nube
+# (AWS EC2) del microservicio BTG Funds. Se incluye para demostrar preparación
+# para migración y despliegue en un entorno de producción real.
+#
+# NOTA IMPORTANTE:
+# ----------------
+# - La prueba técnica actual no exige despliegue en la nube ni uso de licencias.
+# - Se ha preparado el empaquetado local mediante Docker para entregar la app
+#   al proceso de evaluación técnica.
+# - Esta plantilla sirve como guía para migración futura a AWS.
+#
+# AUTOR:
+# ------
+# Jaime Alberto Gutierrez Mejia
+# Analista Programador Java
+# CC: 9733675
+# Movil: 3118841634
+# Correo: jaimealbertogutierrez@gmail.com
+# ************************************************************
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Despliegue del Microservicio BTG Funds - Jaime Gutierrez'
+
+Resources:
+
+  # ************************************************************
+  # Instancia EC2 propuesta para ejecutar el microservicio
+  # ************************************************************
+  BTGEC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      # Tipo de instancia ligera para pruebas
+      InstanceType: t2.micro
+      # Imagen base: Amazon Linux 2 (ID varía según región)
+      ImageId: ami-0c55b159cbfafe1f0
+      SecurityGroups:
+        - !Ref WebServerSecurityGroup
+      Tags:
+        - Key: Name
+          Value: BTG-Funds-Backend
+      UserData:
+        # Script de inicialización de la instancia
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          amazon-linux-extras install docker -y
+          service docker start
+          # NOTA:
+          # Aquí se descargaría la imagen Docker construida localmente
+          # y se correría con:
+          # docker run -d -p 8080:8080 tu-usuario/btg-funds-service
+          # Esto demuestra que el microservicio está listo para un despliegue
+          # en nube sin requerir herramientas o licencias adicionales.
+
+  # ************************************************************
+  # Grupo de seguridad para habilitar acceso HTTP al microservicio
+  # ************************************************************
+  WebServerSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable HTTP access via port 8080
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+
+# ************************************************************
+# ************************************************************
+# ************************************************************
+# ************************************************************
+# ************************************************************

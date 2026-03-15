@@ -1,0 +1,215 @@
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
+# INFORMACIÓN DEL DESARROLLO
+###############################################################################
+#
+# Autor: Jaime Alberto Gutierrez
+# Rol: Analista Programador Java Backend
+# Profesión: Ingeniero de Sistemas y Computación
+# Documento: CC 9733675
+#
+# Correo electrónico:
+# jaimealbertogutierrez@gmail.com
+#
+# Teléfonos de contacto:
+# +57 311 8841634
+# 034 649067928
+#
+# Perfil profesional:
+# https://www.linkedin.com/in/jaime-alberto-guti%C3%A9rrez-mej%C3%ADa-a969bb9/
+#
+# Descripción del archivo:
+#
+# Este archivo corresponde a la configuración principal de la aplicación
+# desarrollada con Spring Boot. En proyectos Spring Boot este archivo suele
+# denominarse application.yml o application.yaml.
+#
+# Su objetivo es centralizar la configuración del microservicio, incluyendo:
+#
+# - Parámetros del servidor web embebido
+# - Configuración de conexión a la base de datos MongoDB
+# - Configuración de funcionalidades propias de la aplicación
+# - Configuración del sistema de logging
+#
+# Este tipo de archivo permite separar la configuración de la lógica de
+# programación, facilitando la administración del sistema en distintos
+# entornos como desarrollo, pruebas o producción.
+#
+###############################################################################
+
+
+###############################################################################
+# CONFIGURACIÓN DEL SERVIDOR DE LA APLICACIÓN
+###############################################################################
+#
+# Spring Boot incorpora un servidor web embebido (generalmente Apache Tomcat)
+# que permite ejecutar el microservicio sin necesidad de instalar un servidor
+# externo.
+#
+# El parámetro "port" define el puerto en el que la aplicación escuchará
+# solicitudes HTTP entrantes.
+#
+###############################################################################
+server:
+  port: 8080
+
+
+###############################################################################
+# CONFIGURACIÓN GENERAL DE SPRING BOOT
+###############################################################################
+#
+# El bloque "spring" agrupa configuraciones propias del framework Spring.
+#
+###############################################################################
+spring:
+
+  ###########################################################################
+  # IDENTIFICACIÓN DE LA APLICACIÓN
+  #
+  # El nombre de la aplicación permite identificar el microservicio dentro
+  # de un ecosistema de servicios distribuidos. Este valor suele utilizarse
+  # en sistemas de monitoreo, trazabilidad, logging o descubrimiento
+  # de servicios.
+  #
+  ###########################################################################
+  application:
+    name: btg-funds-demo
+
+
+  ###########################################################################
+  # CONFIGURACIÓN DE ACCESO A DATOS
+  #
+  # Este bloque define los parámetros necesarios para que el microservicio
+  # pueda conectarse a la base de datos MongoDB.
+  #
+  ###########################################################################
+  data:
+    mongodb:
+
+      #######################################################################
+      # URI DE CONEXIÓN A MONGODB
+      #
+      # Se utiliza una variable de entorno llamada:
+      #
+      # SPRING_DATA_MONGODB_URI
+      #
+      # Esta variable permite definir dinámicamente la conexión a la base
+      # de datos dependiendo del entorno donde se despliegue la aplicación.
+      #
+      # Si la variable de entorno no existe, se utilizará el valor por
+      # defecto (fallback):
+      #
+      # mongodb://localhost:27017/btg_funds_db
+      #
+      # Esto facilita ejecutar el microservicio localmente sin requerir
+      # configuraciones adicionales.
+      #
+      #######################################################################
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/btg_funds_db}
+
+      #######################################################################
+      # REPRESENTACIÓN DE UUID
+      #
+      # MongoDB puede almacenar identificadores UUID de distintas maneras.
+      # El valor "standard" indica que se utilizará la representación
+      # estándar compatible con la mayoría de herramientas modernas.
+      #
+      #######################################################################
+      uuid-representation: standard
+
+
+###############################################################################
+# CONFIGURACIÓN ESPECÍFICA DE LA APLICACIÓN
+###############################################################################
+#
+# Este bloque agrupa configuraciones propias del negocio o funcionalidad
+# particular del microservicio.
+#
+###############################################################################
+app:
+
+  ###########################################################################
+  # CONFIGURACIÓN DEL SISTEMA DE NOTIFICACIONES
+  #
+  # Estos parámetros controlan el comportamiento del módulo de notificación
+  # dentro de la aplicación.
+  #
+  ###########################################################################
+  notification:
+
+    # Permite habilitar o deshabilitar el sistema de notificaciones.
+    # Si se establece en false, la aplicación puede omitir el envío
+    # de notificaciones o mensajes automáticos.
+    enabled: true
+
+    # Nombre del remitente que será utilizado cuando el sistema
+    # genere notificaciones automáticas hacia los usuarios.
+    sender-name: "BTG Pactual Auto-Gestion"
+
+
+###############################################################################
+# CONFIGURACIÓN DEL SISTEMA DE LOGGING
+###############################################################################
+#
+# El logging permite registrar eventos que ocurren dentro de la aplicación,
+# lo cual es fundamental para:
+#
+# - Monitoreo del sistema
+# - Diagnóstico de errores
+# - Auditoría de operaciones
+# - Análisis de rendimiento
+#
+###############################################################################
+logging:
+  level:
+
+    #########################################################################
+    # NIVEL DE LOG GLOBAL
+    #
+    # Define el nivel de logging por defecto para toda la aplicación.
+    # El nivel INFO registra información relevante del sistema sin
+    # generar un volumen excesivo de mensajes.
+    #
+    #########################################################################
+    root: INFO
+
+    #########################################################################
+    # CONFIGURACIÓN DE LOGGING DETALLADO PARA DEPURACIÓN
+    #
+    # Las siguientes configuraciones habilitan niveles de logging más
+    # detallados para componentes específicos relacionados con MongoDB
+    # y con el procesamiento interno de datos.
+    #
+    # Estos niveles suelen utilizarse durante procesos de depuración
+    # o diagnóstico profundo de problemas en la interacción con la
+    # base de datos.
+    #
+    #########################################################################
+
+    # Registra operaciones realizadas por el componente MongoTemplate,
+    # que es el principal mecanismo de acceso a MongoDB en Spring.
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
+    # Registra el protocolo de comunicación utilizado por el driver
+    # de MongoDB.
+    org.mongodb.driver.protocol: TRACE
+
+    # Registra las operaciones internas ejecutadas por el driver.
+    org.mongodb.driver.operation: TRACE
+
+    # Registra el proceso de conversión entre documentos MongoDB
+    # y objetos Java dentro de la aplicación.
+    org.springframework.data.convert: TRACE
+
+    # Logging específico para las clases del paquete principal
+    # de la aplicación.
+    com.example.demo: TRACE
+
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
