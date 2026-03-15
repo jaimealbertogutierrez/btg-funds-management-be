@@ -286,8 +286,23 @@ Nota para el evaluador: El uso de estos scripts garantiza que el Healthcheck def
 ![Detencion del ambiente 1](Parada1.png)
 
 ![Detencion del ambiente 2](Parada2.png)
+---
+
+### 🚀 Validación de la API (Postman)
+Para facilitar las pruebas de integración, se ha incluido una colección de Postman lista para importar:
+* **Ubicación:** `/postman/BTG_Funds_Management.postman_collection.json`
+* **Casos incluidos:** Suscripción exitosa, suscripción con saldo insuficiente, cancelación de fondo y consulta de historial.
+
+* ![Validacion API Postman 1](SetPruebas1.png)
+* 
+* ![Validacion API Postman 2](SetPruebas2.png)
+*
+* ![Validacion API Postman 3](SetPruebas3.png)
+*
+* ![Validacion API Postman 4](SetPruebas4.png)
 
 ---
+
 
 ### Jaime Alberto Gutiérrez
 ### Analista Programador Java

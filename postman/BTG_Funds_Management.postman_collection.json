@@ -1,0 +1,180 @@
+{
+	"info": {
+		"_postman_id": "ab4d9e5a-9a09-4902-9996-d207ceb91d66",
+		"name": "BTG Pactual - Test Plan Real Data",
+		"description": "Pruebas con datos reales: Cliente client-001 y Fondos 1-5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4705406"
+	},
+	"item": [
+		{
+			"name": "1. Suscribir a Deuda Privada (Exito)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Suscripcion exitosa - 201 Created\", function () { pm.response.to.have.status(201); });",
+							"pm.test(\"Tipo de transaccion correcta\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.type).to.eql(\"SUBSCRIPTION\");",
+							"    pm.expect(jsonData.amount).to.eql(50000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"clientId\": \"client-001\",\n    \"fundId\": \"3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/funds/subscribe",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"funds",
+						"subscribe"
+					]
+				},
+				"description": "Suscribe al cliente al fondo ID 3 (Monto 50.000). Saldo restante esperado: 450.000"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Validar Historial",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/funds/transactions/client-001",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"funds",
+						"transactions",
+						"client-001"
+					]
+				},
+				"description": "Consulta las transacciones del cliente-001"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Error: Saldo Insuficiente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Error esperado - 400 Bad Request\", function () { pm.response.to.have.status(400); });",
+							"pm.test(\"Mensaje de error exacto segun requerimiento\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"No tiene saldo disponible para vincularse al fondo FDO-ACCIONES\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"clientId\": \"client-001\",\n    \"fundId\": \"5\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/funds/subscribe",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"funds",
+						"subscribe"
+					]
+				},
+				"description": "Intenta suscribirse a FDO-ACCIONES (ID 4) que pide 250.000. Si ya te suscribiste a varios antes, este deberia fallar al agotar los 500.000 iniciales."
+			},
+			"response": []
+		},
+		{
+			"name": "4. Cancelar Suscripcion (Retorno de dinero)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Cancelacion exitosa - 201 Created\", function () { pm.response.to.have.status(201); });",
+							"pm.test(\"Tipo es CANCELLATION\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.type).to.eql(\"CANCELLATION\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"clientId\": \"client-001\",\n    \"fundId\": \"4\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/funds/cancel",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"funds",
+						"cancel"
+					]
+				},
+				"description": "Cancela la suscripcion al fondo 3. El saldo del cliente deberia aumentar de nuevo."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
