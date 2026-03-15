@@ -252,6 +252,44 @@ Utilice estos comandos para inspeccionar y gestionar la aplicación durante la r
 
 ---
 
+---
 
-Jaime Alberto Gutiérrez
-Analista Programador Java
+## 🛠️ Automatización y Gestión del Entorno (Scripts)
+
+Para facilitar la revisión técnica y asegurar que el ambiente se encuentre en un estado óptimo y consistente, se han incluido scripts de automatización en la raíz del proyecto. Estos archivos gestionan el ciclo de vida completo de los contenedores sin necesidad de comandos manuales complejos.
+
+### 🚀 1. Arranque de la Solución (`arrancarSolucion.bat`)
+Este script automatiza el despliegue del stack completo. Realiza las siguientes acciones:
+1.  **Limpieza de Seguridad:** Ejecuta un `down --volumes` para eliminar cualquier rastro de ejecuciones previas y asegurar que la base de datos se inicialice con los datos frescos del cliente y los fondos.
+2.  **Build Multi-Etapa:** Compila el código fuente y construye la imagen de la aplicación.
+3.  **Monitoreo:** Muestra una tabla con el estado de los servicios y abre los logs en tiempo real para verificar el arranque de Spring Boot.
+
+**Uso:**
+Simplemente haz doble clic sobre el archivo `arrancarSolucion.bat` o ejecútalo desde la terminal:
+```bash
+.\arrancarSolucion.bat
+```
+![Arranque del ambiente 1](Arranque1.png)
+
+![Arranque del ambiente 2](Arranque2.png)
+
+
+🛑 2. Apagado y Limpieza del Entorno (detenerSolucion.bat)
+Si deseas liberar recursos o reiniciar la prueba desde cero, este script detiene los contenedores y elimina las redes internas creadas por Docker.
+
+Uso:
+
+Bash
+.\detenerSolucion.bat
+Nota para el evaluador: El uso de estos scripts garantiza que el Healthcheck definido en el docker-compose.yml se respete, asegurando que el microservicio no intente realizar operaciones de base de datos hasta que el motor de MongoDB esté completamente operativo.
+
+![Detencion del ambiente 1](Parada1.png)
+
+![Detencion del ambiente 2](Parada2.png)
+
+---
+
+### Jaime Alberto Gutiérrez
+### Analista Programador Java
+### Todos los Derechos Reservados
+### 2026
